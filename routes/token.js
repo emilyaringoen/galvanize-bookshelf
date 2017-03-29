@@ -6,12 +6,8 @@ const knex = require('../knex')
 const humps = require('humps')
 const bcrypt = require('bcrypt')
 
-// YOUR CODE HERE
 router.get('/token', (req, res, next) => {
-  if (req.body.length === 0) {
-    return res.status(200)
-              .send('false')
-  }
+  res.send(false)
 })
 
 // router.post('/token', (req, res, next) => {

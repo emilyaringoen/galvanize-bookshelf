@@ -1,31 +1,24 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const router = express.Router();
-const knex = require('../knex')
+const express = require('express')
+const router = express.Router()
 const humps = require('humps')
+const knex = require('../knex')
 const bcrypt = require('bcrypt')
+const boom = require('boom')
+const cookie = require('cookie-session')
+const jwt = require('jsonwebtoken');
+
+let authenticationStatus = false;
 
 router.get('/token', (req, res, next) => {
-  res.send(false)
+  res.send(authenticationStatus)
 })
 
-// router.post('/token', (req, res, next) => {
-//   console.log(req.body);
-//   // if (!req.body)
-//   //
-//   // knex('token')
-//   //   .returning(['id', 'email'])
-//   //   .insert({
-//   //     id: req.body.id,
-//   //     email: req.body.email,
-//   //     token: bcrypt.hashSync(req.body.password, 8)
-//   //   }).then((user) => {
-//   //     console.log(user[0]);
-//   //     res.send(humps.camelizeKeys(user[0]))
-//   //   })
-//   res.end()
-// })
+router.post('/token', (req, res, next) => {
+  
+})
+
 
 
 module.exports = router;

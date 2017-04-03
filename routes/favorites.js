@@ -21,17 +21,49 @@ router.get('/favorites', (req, res, next) => {
   }
 })
 
-router.get('/favorites/check', (req, res, id) => {
-  knex('favorites')
-    .where('book_id', req.query.bookId)
-    .then((data) => {
-      if (data.length > 0) {
-        res.status(200).send(true)
-      } else {
-        res.status(200).send(false)
-      }
-    })
+router.get('/favorites/check', (req, res, next) => {
+  if (!req.cookies.token) {
+    next(boom.create(401, 'Unauthorized'))
+  } else {
+    knex('favorites')
+      .where('book_id', req.query.bookId)
+      .then((data) => {
+        if (data.length > 0) {
+          res.status(200).send(true)
+        } else {
+          res.status(200).send(false)
+        }
+      })
+  }
 })
 
+router.post('/favorites', (req, res, next) => {
+  if (!req.cookies.token) {
+    next(boom.create(401, 'Unauthorized'))
+  } else {
+    knex('favorites')
+      .returning(['id', 'book_id', 'user_id'])
+      .insert({
+        book_id: req.body.bookId,
+        user_id: 1
+      }).then((fav) => {
+        res.send(humps.camelizeKeys(fav[0]))
+      })
+  }
+})
+
+router.delete('/favorites', (req, res, next) => {
+  if (!req.cookies.token) {
+    next(boom.create(401, 'Unauthorized'))
+  } else {
+    knex('favorites')
+      .returning(['book_id', 'user_id'])
+      .where('book_id', req.body.bookId)
+      .del()
+      .then((fav) => {
+        res.send(humps.camelizeKeys(fav[0]))
+      })
+  }
+})
 
 module.exports = router;
